@@ -8,10 +8,11 @@
 ;====================================================================
 
 .include "m8515def.inc"
+.def last_key_pressed = r14
 .def flag_game_start = r15
 .def temp = r16 ; temporary register
 .def temp_1 = r17
-.def number = r18 ; 
+.def number = r18
 .def number_digit_0 = r19
 .def number_digit_1 = r20
 .def guess = r21
@@ -53,6 +54,11 @@ INIT_INTERRUPT:
 	out GICR, temp
 	sei
 
+INIT_KEYPAD:
+	ldi temp, 0x00
+	mov last_key_pressed, temp
+	out DDRC, temp
+
 INIT_GAME_DATA:
 	ldi temp, 0
 	mov flag_game_start, temp
@@ -83,22 +89,26 @@ GENERATE_NUMBER:
 
 GAME_START:
 	; Insert LED and LCD related things here
-	; Codes below are dummy, for testing keypad only
-	; Still problematic, keypad are being read too fast | Currently fixed by using 200ms delay
-	INIT_KEYPAD:
-		rcall DELAY_200ms
+
+	TEST_KEY_PRESSED:
+		; Remember to clear the DDRC everytime we scan the keypad
 		ldi temp, 0x00
 		out DDRC, temp
 
-	TEST_KEY_PRESSED:
 		; By sending 1s to all row lines, we can get which column is high
 		ldi temp, 0b00001111
 		out DDRC, temp ; Set Row Lines as Output
 		out PORTC, temp ; Sending 1s to Row Lines
 		nop
 		in temp, PINC ; Read Column result
-		cpi temp, 0b00001111
+		cpi temp, 0b00001111 ; All 0s on column means nothing is pressed
 		brne KEY_PRESSED
+
+		; When nothing is pressed, we simulate falling edge trigger
+		; Which mean key is only processed when user release the button
+		mov temp, last_key_pressed
+		cpi temp, 0x00
+		brne KEY_CHECK
 		rjmp TEST_KEY_PRESSED
 
 	KEY_PRESSED:
@@ -109,6 +119,33 @@ GAME_START:
 		nop
 		in temp_1, PINC ; Read Row result
 		and temp, temp_1 ; Combining the two, we can get which button is pressed
+		mov last_key_pressed, temp ; Save the button to a register to simulate falling edge trigger
+		rjmp TEST_KEY_PRESSED
+
+	KEY_CHECK:
+		; Clear last key pressed
+		ldi temp_1, 0x00
+		mov last_key_pressed, temp_1
+
+		; Check for ENTER and CLEAR
+		cpi temp, 0b00100001
+		breq KEY_ENTER
+		cpi temp, 0b10000001
+		breq KEY_CLEAR
+
+		; If last column is pressed (Left, Right, Up, Down), immediately goes back to scanning
+		; We do not use those column
+		sbrc temp, 4
+		rjmp TEST_KEY_PRESSED
+
+		; This means that the remaining possibilities are number keys
+		; We check if the guess has in 2 digits (as our guess within 0 to 99)
+		; If so, we go back to scanning keypad
+		mov temp_1, guess
+		subi temp_1, 10
+		brsh TEST_KEY_PRESSED
+
+		rcall MULTIPLY_BY_TEN ; All number key operation means the digit is shifted to left
 
 		cpi temp, 0b01000001
 		breq KEY_0
@@ -130,134 +167,60 @@ GAME_START:
 		breq KEY_8
 		cpi temp, 0b00100010
 		breq KEY_9
-		rjmp INIT_KEYPAD
+		rjmp TEST_KEY_PRESSED
 
+		KEY_ENTER:
+			rjmp TEST_KEY_PRESSED
+		KEY_CLEAR:
+			rjmp TEST_KEY_PRESSED
 		KEY_0:
-			mov temp, guess
-			subi temp, 10
-			brsh KEY_0_BACK_TO_SCAN
-			rcall MULTIPLY_BY_TEN
-			mov guess, temp
-			KEY_0_BACK_TO_SCAN:
-			rjmp INIT_KEYPAD
+			mov guess, temp_1
+			rjmp TEST_KEY_PRESSED
 		KEY_1:
-			mov temp, guess
-			subi temp, 10
-			brsh KEY_1_BACK_TO_SCAN
-			rcall MULTIPLY_BY_TEN
-			subi temp, -1
-			mov guess, temp
-			KEY_1_BACK_TO_SCAN:
-			rjmp INIT_KEYPAD
+			subi temp_1, -1
+			mov guess, temp_1
+			rjmp TEST_KEY_PRESSED
 		KEY_2:
-			mov temp, guess
-			subi temp, 10
-			brsh KEY_2_BACK_TO_SCAN
-			rcall MULTIPLY_BY_TEN
-			subi temp, -2
-			mov guess, temp
-			KEY_2_BACK_TO_SCAN:
-			rjmp INIT_KEYPAD
+			subi temp_1, -2
+			mov guess, temp_1
+			rjmp TEST_KEY_PRESSED
 		KEY_3:
-			mov temp, guess
-			subi temp, 10
-			brsh KEY_3_BACK_TO_SCAN
-			rcall MULTIPLY_BY_TEN
-			subi temp, -3
-			mov guess, temp
-			KEY_3_BACK_TO_SCAN:
-			rjmp INIT_KEYPAD
+			subi temp_1, -3
+			mov guess, temp_1
+			rjmp TEST_KEY_PRESSED
 		KEY_4:
-			mov temp, guess
-			subi temp, 10
-			brsh KEY_4_BACK_TO_SCAN
-			rcall MULTIPLY_BY_TEN
-			subi temp, -4
-			mov guess, temp
-			KEY_4_BACK_TO_SCAN:
-			rjmp INIT_KEYPAD
+			subi temp_1, -4
+			mov guess, temp_1
+			rjmp TEST_KEY_PRESSED
 		KEY_5:
-			mov temp, guess
-			subi temp, 10
-			brsh KEY_5_BACK_TO_SCAN
-			rcall MULTIPLY_BY_TEN
-			subi temp, -5
-			mov guess, temp
-			KEY_5_BACK_TO_SCAN:
-			rjmp INIT_KEYPAD
+			subi temp_1, -5
+			mov guess, temp_1
+			rjmp TEST_KEY_PRESSED
 		KEY_6:
-			mov temp, guess
-			subi temp, 10
-			brsh KEY_6_BACK_TO_SCAN
-			rcall MULTIPLY_BY_TEN
-			subi temp, -6
-			mov guess, temp
-			KEY_6_BACK_TO_SCAN:
-			rjmp INIT_KEYPAD
+			subi temp_1, -6
+			mov guess, temp_1
+			rjmp TEST_KEY_PRESSED
 		KEY_7:
-			mov temp, guess
-			subi temp, 10
-			brsh KEY_7_BACK_TO_SCAN
-			rcall MULTIPLY_BY_TEN
-			subi temp, -7
-			mov guess, temp
-			KEY_7_BACK_TO_SCAN:
-			rjmp INIT_KEYPAD
+			subi temp_1, -7
+			mov guess, temp_1
+			rjmp TEST_KEY_PRESSED
 		KEY_8:
-			mov temp, guess
-			subi temp, 10
-			brsh KEY_8_BACK_TO_SCAN
-			rcall MULTIPLY_BY_TEN
-			subi temp, -8
-			mov guess, temp
-			KEY_8_BACK_TO_SCAN:
-			rjmp INIT_KEYPAD
+			subi temp_1, -8
+			mov guess, temp_1
+			rjmp TEST_KEY_PRESSED
 		KEY_9:
-			mov temp, guess
-			subi temp, 10
-			brsh KEY_9_BACK_TO_SCAN
-			rcall MULTIPLY_BY_TEN
-			subi temp, -9
-			mov guess, temp
-			KEY_9_BACK_TO_SCAN:
-			rjmp INIT_KEYPAD
+			subi temp_1, -9
+			mov guess, temp_1
+			rjmp TEST_KEY_PRESSED
 
 ;====================================================================
 ; CODE SEGMENT | SUBROUTINE
 ;====================================================================
 
-; This subroutine will replace temp with guess * 10
-; Will replace data in temp and temp_1
+; This subroutine will replace temp_1 with guess * 10
+; Will replace data in temp_1
 MULTIPLY_BY_TEN:
-	mov temp, guess
 	ldi temp_1, 10
-	mul temp, temp_1
-	mov temp, r0
+	mul guess, temp_1
+	mov temp_1, r0
 	ret
-
-DELAY_200ms:
-	rcall DELAY_20ms
-	rcall DELAY_20ms
-	rcall DELAY_20ms
-	rcall DELAY_20ms
-	rcall DELAY_20ms
-	rcall DELAY_20ms
-	rcall DELAY_20ms
-	rcall DELAY_20ms
-	rcall DELAY_20ms
-	rcall DELAY_20ms
-	ret
-
-DELAY_20ms:
-	; Generated by delay loop calculator
-	; at http://www.bretmulvey.com/avrdelay.html
-	;
-	; Delay 80 000 cycles
-	; 20ms at 4 MHz
-
-    	ldi  temp, 104
-    	ldi  temp_1, 229
-	L1: dec  temp_1
-		brne L1
-		dec  temp
-		brne L1
