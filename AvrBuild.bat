@@ -1,0 +1,2 @@
+@ECHO OFF
+"C:\Program Files (x86)\Atmel\AVR Tools\AvrAssembler2\avrasm2.exe" -S "D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\labels.tmp" -fI -W+ie -C V2E -o "D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.hex" -d "D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.obj" -e "D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.eep" -m "D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.map" "D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm"

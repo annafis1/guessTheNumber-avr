@@ -12,11 +12,85 @@
       <Target>ATmega8515</Target>
    </General>
    <Views>
+      <LCD>
+         <Name>LCD1</Name>
+         <Position>
+            <top>25</top>
+            <left>23</left>
+         </Position>
+         <DisplayConfig>
+            <columns>16</columns>
+            <rows>2</rows>
+            <bkColor>0xc1fa9d</bkColor>
+            <size>2</size>
+         </DisplayConfig>
+         <PortMapping>
+            <DataPort>
+               <Port>PORTB</Port>
+               <HighNibble>bit 4..7</HighNibble>
+               <LowNibble>N.C.</LowNibble>
+            </DataPort>
+            <EnablePin>
+               <Port>PORTA</Port>
+               <Bit>0</Bit>
+            </EnablePin>
+            <RW_Pin>
+               <WriteOnly>0</WriteOnly>
+               <Port>PORTA</Port>
+               <Bit>2</Bit>
+            </RW_Pin>
+            <RS_Pin>
+               <Port>PORTA</Port>
+               <Bit>1</Bit>
+            </RS_Pin>
+         </PortMapping>
+      </LCD>
+      <Buttons>
+         <Name>Buttons1</Name>
+         <Position>
+            <top>114</top>
+            <left>38</left>
+         </Position>
+         <Config index="0">
+            <Name>Button0</Name>
+            <PortPin>
+               <Port>PORTD</Port>
+               <Bit>2</Bit>
+            </PortPin>
+            <Invert>0</Invert>
+         </Config>
+         <Config index="1">
+            <Name>Button1</Name>
+            <PortPin>
+               <Port>PORTD</Port>
+               <Bit>3</Bit>
+            </PortPin>
+            <Invert>0</Invert>
+         </Config>
+         <Config index="2">
+            <Name>Button2</Name>
+            <PortPin>
+               <Port>PORTA</Port>
+               <Bit>6</Bit>
+            </PortPin>
+            <Invert>0</Invert>
+         </Config>
+         <Config index="3">
+            <Name>Button3</Name>
+            <PortPin>
+               <Port>PORTA</Port>
+               <Bit>7</Bit>
+            </PortPin>
+            <Invert>0</Invert>
+         </Config>
+         <TrinaryGroupEnable index="0">0</TrinaryGroupEnable>
+         <TrinaryGroupEnable index="1">0</TrinaryGroupEnable>
+      </Buttons>
       <Keypad>
          <Name>Keypad1</Name>
          <Position>
-            <top>26</top>
-            <left>26</left>
+            <top>29</top>
+            <left>253</left>
          </Position>
          <PortMapping>
             <Strobe index="0">

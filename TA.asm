@@ -17,6 +17,22 @@
 .def number_digit_1 = r20
 .def guess = r21
 
+; Registers for Timer
+.def keep_1 = r9
+.def keep_2 = r10
+.def tenths = r11
+.def ones = r12
+.def counter = r13
+.def PB = r22 ; for PORTB
+
+; Register for LCD
+.def A = r7
+
+; CONSTANTS
+.equ one_sec_overflow = 24
+.equ location_of_guess_first_digit = 0xC6
+.equ location_of_guess_second_digit = 0xC7
+
 ;====================================================================
 ; RESET and INTERRUPT VECTORS
 ;====================================================================
@@ -25,8 +41,8 @@
 rjmp MAIN
 .org INT0
 rjmp SET_GAME_START
-; .org INT1
-; rjmp ext_int1
+.org $07
+rjmp ISR_TOV0
 
 ;====================================================================
 ; CODE SEGMENT
@@ -43,9 +59,38 @@ INIT_STACK:
 	ldi temp, high(RAMEND)
 	out SPH, temp
 
-INIT_LED:
-	ser temp ; load $FF to temp
-	out DDRC, temp ; Set PORTA to output
+INITIALIZER:
+	ldi temp, 6
+	mov tenths, temp
+	ldi temp, 0
+	mov ones, temp
+	mov counter, temp
+
+INIT_LCD:
+	cbi PORTA,1 ; CLR RS
+	ldi PB,0x38 ; MOV DATA,0x38 --> 8bit, 2line, 5x7
+	out PORTB,PB
+	sbi PORTA,0 ; SETB EN
+	cbi PORTA,0 ; CLR EN
+	cbi PORTA,1 ; CLR RS
+	ldi PB,$0E ; MOV DATA,0x0E --> disp ON, cursor ON, blink OFF
+	sbi PORTA,0 ; SETB EN
+	cbi PORTA,0 ; CLR EN
+	rcall CLEAR_LCD ; CLEAR LCD
+	cbi PORTA,1 ; CLR RS
+	ldi PB,$06 ; MOV DATA,0x06 --> increase cursor, display sroll OFF
+	out PORTB,PB
+	sbi PORTA,0 ; SETB EN
+	cbi PORTA,0 ; CLR EN
+
+INIT_TIMER:
+	ldi temp, (1<<CS01 | 1<<CS00)	; set timer control register, 1/8 of Ck
+	out TCCR0, temp
+	ldi temp, 1<<TOV0	; Set interrupt in timer 0 on overflow
+	out TIFR, temp
+	ldi temp, 1<<TOIE0	; Enable timer 0 overflow interrupt	; 
+	out TIMSK, temp
+	ser temp
 
 INIT_INTERRUPT:
 	ldi temp, 0b00001010
@@ -57,7 +102,6 @@ INIT_INTERRUPT:
 INIT_KEYPAD:
 	ldi temp, 0x00
 	mov last_key_pressed, temp
-	out DDRC, temp
 
 INIT_GAME_DATA:
 	ldi temp, 0
@@ -77,50 +121,73 @@ GENERATE_NUMBER:
 	ldi number_digit_0, 0
 
 	CHECK_SECOND_DIGIT:
-	cpi number_digit_1, 10
-	brne TEST_IF_GAME_START
-	ldi number, 1
-	ldi number_digit_0, 1
-	ldi number_digit_1, 0
+		cpi number_digit_1, 10
+		brne TEST_IF_GAME_START
+		ldi number, 1
+		ldi number_digit_0, 1
+		ldi number_digit_1, 0
 
 	TEST_IF_GAME_START:
-	;tst flag_game_start
-	;breq GENERATE_NUMBER
+		tst flag_game_start
+		breq GENERATE_NUMBER
 
 GAME_START:
 	; Insert LED and LCD related things here
 
-	TEST_KEY_PRESSED:
-		; Remember to clear the DDRC everytime we scan the keypad
-		ldi temp, 0x00
-		out DDRC, temp
+	; Failsafe for broken SREG by timer interrupt
+	tst flag_game_start
+	breq GENERATE_NUMBER
 
-		; By sending 1s to all row lines, we can get which column is high
-		ldi temp, 0b00001111
-		out DDRC, temp ; Set Row Lines as Output
-		out PORTC, temp ; Sending 1s to Row Lines
-		nop
-		in temp, PINC ; Read Column result
-		cpi temp, 0b00001111 ; All 0s on column means nothing is pressed
-		brne KEY_PRESSED
+	PRINT_GUESS:
+		cbi PORTA, 1
+		ldi PB, 0xC0
+		out PORTB, PB
+		sbi PORTA, 0
+		cbi PORTA, 0
+		ldi ZH, high(guess_text * 2)
+		ldi ZL, low(guess_text * 2)
+		rcall LOADBYTE
 
-		; When nothing is pressed, we simulate falling edge trigger
-		; Which mean key is only processed when user release the button
-		mov temp, last_key_pressed
-		cpi temp, 0x00
-		brne KEY_CHECK
-		rjmp TEST_KEY_PRESSED
+	SCANNING_KEYPAD:
+		POWER_UP_ROW:
+			; By powering all row lines, we can detect the column of pressed key
+			ldi temp, 0b00001111
+			out DDRC, temp ; Set row lines as output
+			out PORTC, temp ; Powering row lines
 
-	KEY_PRESSED:
-		; By sending 1s to all column lines, we can get which row as high
-		ldi temp_1, 0b11110000
-		out DDRC, temp_1 ; Set Column Lines as Output
-		out PORTC, temp_1 ; Sending 1s to Column Lines
-		nop
-		in temp_1, PINC ; Read Row result
-		and temp, temp_1 ; Combining the two, we can get which button is pressed
-		mov last_key_pressed, temp ; Save the button to a register to simulate falling edge trigger
-		rjmp TEST_KEY_PRESSED
+		READ_COLUMN:
+			rcall DELAY
+			in temp, PINC ; Read the column
+			cpi temp, 0b00001111 ; If all column is low, no key is pressed
+			brne POWER_UP_COLUMN
+
+		FALLING_EDGE_TRIGGER:
+			; When nothing is pressed, we simulate falling edge trigger
+			; Which mean key is only processed when user release the button
+			mov temp, last_key_pressed
+			cpi temp, 0x00
+			brne KEY_CHECK
+			rjmp READ_COLUMN
+
+		POWER_UP_COLUMN:
+			; By powering all column lines, we can detect the column of pressed key
+			ldi temp_1, 0b11110000
+			out DDRC, temp_1 ; Set row lines as output
+			out PORTC, temp_1 ; Powering row lines
+
+		READ_ROW:
+			rcall DELAY
+			in temp_1, PINC ; Read the row
+			cpi temp, 0b11110000 ; Failsafe for fast key press
+			breq POWER_UP_ROW
+			and temp, temp_1 ; Combining the two, we can get which button is pressed
+			
+			mov temp_1, last_key_pressed	; We are not going to process the button
+			cpi temp_1, 0x00				; If we're not yet processing the previous button
+			brne POWER_UP_ROW
+
+			mov last_key_pressed, temp ; Save the button to a register to simulate falling edge trigger
+			rjmp POWER_UP_ROW
 
 	KEY_CHECK:
 		; Clear last key pressed
@@ -136,14 +203,14 @@ GAME_START:
 		; If last column is pressed (Left, Right, Up, Down), immediately goes back to scanning
 		; We do not use those column
 		sbrc temp, 4
-		rjmp TEST_KEY_PRESSED
+		rjmp SCANNING_KEYPAD
 
 		; This means that the remaining possibilities are number keys
 		; We check if the guess has in 2 digits (as our guess within 0 to 99)
 		; If so, we go back to scanning keypad
 		mov temp_1, guess
 		subi temp_1, 10
-		brsh TEST_KEY_PRESSED
+		brsh SCANNING_KEYPAD
 
 		rcall MULTIPLY_BY_TEN ; All number key operation means the digit is shifted to left
 
@@ -167,51 +234,94 @@ GAME_START:
 		breq KEY_8
 		cpi temp, 0b00100010
 		breq KEY_9
-		rjmp TEST_KEY_PRESSED
+		rjmp SCANNING_KEYPAD
 
 		KEY_ENTER:
-			rjmp TEST_KEY_PRESSED
+			rjmp SCANNING_KEYPAD
 		KEY_CLEAR:
-			rjmp TEST_KEY_PRESSED
+			ldi guess, 0
+			rcall CLEAR_SECOND_ROW
+			rcall LOADBYTE
+			rjmp PRINT_GUESS
 		KEY_0:
+			tst guess
+			breq SCANNING_KEYPAD
 			mov guess, temp_1
-			rjmp TEST_KEY_PRESSED
+			ldi temp_1, 0x30
+			mov A, temp_1
+			rcall PRINT_KEY
+			rjmp SCANNING_KEYPAD
 		KEY_1:
 			subi temp_1, -1
 			mov guess, temp_1
-			rjmp TEST_KEY_PRESSED
+			ldi temp_1, 0x31
+			mov A, temp_1
+			rcall PRINT_KEY
+			rjmp SCANNING_KEYPAD
 		KEY_2:
 			subi temp_1, -2
 			mov guess, temp_1
-			rjmp TEST_KEY_PRESSED
+			ldi temp_1, 0x32
+			mov A, temp_1
+			rcall PRINT_KEY
+			rjmp SCANNING_KEYPAD
 		KEY_3:
 			subi temp_1, -3
 			mov guess, temp_1
-			rjmp TEST_KEY_PRESSED
+			ldi temp_1, 0x33
+			mov A, temp_1
+			rcall PRINT_KEY
+			rjmp SCANNING_KEYPAD
 		KEY_4:
 			subi temp_1, -4
 			mov guess, temp_1
-			rjmp TEST_KEY_PRESSED
+			ldi temp_1, 0x34
+			mov A, temp_1
+			rcall PRINT_KEY
+			rjmp SCANNING_KEYPAD
 		KEY_5:
 			subi temp_1, -5
 			mov guess, temp_1
-			rjmp TEST_KEY_PRESSED
+			ldi temp_1, 0x35
+			mov A, temp_1
+			rcall PRINT_KEY
+			rjmp SCANNING_KEYPAD
 		KEY_6:
 			subi temp_1, -6
 			mov guess, temp_1
-			rjmp TEST_KEY_PRESSED
+			ldi temp_1, 0x36
+			mov A, temp_1
+			rcall PRINT_KEY
+			rjmp SCANNING_KEYPAD
 		KEY_7:
 			subi temp_1, -7
 			mov guess, temp_1
-			rjmp TEST_KEY_PRESSED
+			ldi temp_1, 0x37
+			mov A, temp_1
+			rcall PRINT_KEY
+			rjmp SCANNING_KEYPAD
 		KEY_8:
 			subi temp_1, -8
 			mov guess, temp_1
-			rjmp TEST_KEY_PRESSED
+			ldi temp_1, 0x38
+			mov A, temp_1
+			rcall PRINT_KEY
+			rjmp SCANNING_KEYPAD
 		KEY_9:
 			subi temp_1, -9
 			mov guess, temp_1
-			rjmp TEST_KEY_PRESSED
+			ldi temp_1, 0x39
+			mov A, temp_1
+			rcall PRINT_KEY
+			rjmp SCANNING_KEYPAD
+
+CLEAR_LCD:
+	cbi PORTA,1 ; CLR RS
+	ldi PB,$01 ; MOV DATA,0x01
+	out PORTB,PB
+	sbi PORTA,0 ; SETB EN
+	cbi PORTA,0 ; CLR EN
+	ret
 
 ;====================================================================
 ; CODE SEGMENT | SUBROUTINE
@@ -224,3 +334,164 @@ MULTIPLY_BY_TEN:
 	mul guess, temp_1
 	mov temp_1, r0
 	ret
+
+PRINT_KEY:
+	mov A, temp_1
+	mov temp_1, guess
+	subi temp_1, 10
+	brsh SET_SECOND_DIGIT
+
+	SET_FIRST_DIGIT:
+		cbi PORTA, 1
+		ldi PB, location_of_guess_first_digit
+		out PORTB, PB
+		sbi PORTA, 0
+		cbi PORTA, 0
+		rjmp PRINT_THE_KEY
+	SET_SECOND_DIGIT:
+		cbi PORTA, 1
+		ldi PB, location_of_guess_second_digit
+		out PORTB, PB
+		sbi PORTA, 0
+		cbi PORTA, 0
+		rjmp PRINT_THE_KEY
+	
+	PRINT_THE_KEY:
+		rcall WRITE_TEXT
+		ret
+
+DELAY:
+	nop
+	ret
+
+;==========================================================
+; LCD WRITER FUNCTION
+;==========================================================
+;
+
+CLEAR_SECOND_ROW:
+	cbi PORTA, 1
+	ldi PB, 0xC0
+	out PORTB, PB
+	sbi PORTA, 0
+	cbi PORTA, 0
+	ldi ZH, high(clear_second_row_text * 2)
+	ldi ZL, low(clear_second_row_text * 2)
+	ret
+
+LOADBYTE:
+	lpm ; Load byte from program memory into r0
+	tst r0 ; Check if we've reached the end of the message
+	breq END_LCD ; If so, quit
+	mov A, r0 ; Put the character onto Port B
+	rcall WRITE_TEXT
+	adiw ZL,1 ; Increase Z registers
+	rjmp LOADBYTE
+
+WRITE_TEXT:
+	sbi PORTA, 1 ; SETB RS
+	out PORTB, A
+	sbi PORTA, 0 ; SETB EN
+	cbi PORTA, 0 ; CLR EN
+	ret
+
+END_LCD:
+	sei 
+	ret
+
+;=====================================================================
+; TIMER INTERRUPT ON OVERFLOW SUBROUTINE
+;=====================================================================
+; A 1 second subroutine for The timer
+
+ISR_TOV0:
+	mov keep_1, temp
+	mov keep_2, temp_1
+	ldi temp, one_sec_overflow
+	inc counter
+	cp counter, temp
+	brne RETURN_TIME_INTERRUPT
+
+	DECREASE_TIMER_DISPLAY:
+		ldi temp, 0x00
+		cp ones, temp
+		brne NORMAL_DECREMENT
+	
+	CHECK_TIME_RUN_OUT:
+		cp tenths, temp
+		brne TENTHS_DECREMENT
+		rjmp TIMER_RUN_OUT
+	
+	NORMAL_DECREMENT:
+		dec ones
+		rjmp PRINT_TIMER_DISPLAY
+	
+	TENTHS_DECREMENT:
+		ldi temp, 9
+		mov ones, temp
+		dec tenths
+		rjmp PRINT_TIMER_DISPLAY
+	
+	PRINT_TIMER_DISPLAY:
+		mov temp, tenths
+		mov temp_1, ones
+		or temp, temp_1
+		cpi temp, 0
+		breq TIMER_RUN_OUT		
+
+		ldi temp, 0
+		mov counter, temp
+		cbi PORTA, 1
+		ldi PB, 0x80	; Move to DRAM 0, subject to change
+		out PORTB, PB
+		sbi PORTA, 0
+		cbi PORTA, 0
+		mov temp, tenths
+		subi temp, -48
+		mov A, temp
+		rcall WRITE_TEXT
+		mov temp, ones
+		subi temp, -48
+		mov A, temp
+		rcall WRITE_TEXT
+		rjmp RETURN_TIME_INTERRUPT
+
+	TIMER_RUN_OUT:
+		ldi temp, 6
+		mov tenths, temp
+		ldi temp, 0
+		mov ones, temp
+		mov counter, temp
+		cbi PORTA, 1
+		ldi PB, 0x80	; Move to DRAM 0, subject to change
+		out PORTB, PB
+		sbi PORTA, 0
+		cbi PORTA, 0
+		ldi ZH, high(2 * timesUp) ; Load high part of byte address into ZH
+		ldi ZL, low(2 * timesUp) ; Load high part of byte address into ZH
+		rcall LOADBYTE
+		rjmp RETURN_TIME_INTERRUPT
+	
+	RETURN_TIME_INTERRUPT:
+		mov temp, keep_1
+		mov temp_1, keep_2
+		reti
+
+;=====================================================================
+; Data
+;=====================================================================
+
+timesUp:
+.db "TIMES UP!",0 
+
+higher:
+.db "HIGHER!",0
+
+lower:
+.db "LOWER!",0
+
+guess_text:
+.db "GUESS:", 0
+
+clear_second_row_text:
+.db "        ", 0
