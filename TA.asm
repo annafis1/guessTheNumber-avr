@@ -18,12 +18,23 @@
 .def guess = r21
 
 ; Registers for Timer
+.def timerLost = r25
 .def keep_1 = r9
 .def keep_2 = r10
 .def tenths = r11
 .def ones = r12
 .def counter = r13
 .def PB = r22 ; for PORTB
+
+
+; Register for interrupt handler
+.def handler1 = r6
+.def handler2 = r5
+
+; Register for games
+.def score = r8
+.def levelIndicator = r23
+.def timerIndicator = r24
 
 ; Register for LCD
 .def A = r7
@@ -39,8 +50,10 @@
 
 .org $00
 rjmp MAIN
-.org INT0
+.org $01
 rjmp SET_GAME_START
+.org $02
+rjmp NEXT_GAME
 .org $07
 rjmp ISR_TOV0
 
@@ -48,8 +61,23 @@ rjmp ISR_TOV0
 ; CODE SEGMENT
 ;====================================================================
 SET_GAME_START:
+	cp handler1, r1 
+	brne DO_NONE
+	inc handler1
+	inc handler2
+	ldi timerIndicator, 0x01
+	ldi levelIndicator, 0x31
+	ldi temp, 0x30
+	mov score, temp
+	rcall CLEAR_LCD
+	rcall LEVEL_WRITE
+	rcall POINT_WRITE
+	rcall TIME_WRITE
 	ldi temp, 1
 	mov flag_game_start, temp
+	reti
+
+DO_NONE:
 	reti
 
 MAIN:
@@ -64,7 +92,6 @@ INITIALIZER:
 	mov tenths, temp
 	ldi temp, 0
 	mov ones, temp
-	mov counter, temp
 
 INIT_LCD:
 	cbi PORTA,1 ; CLR RS
@@ -82,6 +109,16 @@ INIT_LCD:
 	out PORTB,PB
 	sbi PORTA,0 ; SETB EN
 	cbi PORTA,0 ; CLR EN
+
+WELCOME:
+	rcall CLEAR_LCD
+	ldi ZH, high(startMessage * 2)
+	ldi ZL, low(startMessage * 2)
+	rcall LOADBYTE
+	rcall GO_DOWN
+	ldi ZH, high(byMessage * 2)
+	ldi ZL, low(byMessage * 2)
+	rcall LOADBYTE
 
 INIT_TIMER:
 	ldi temp, (1<<CS01 | 1<<CS00)	; set timer control register, 1/8 of Ck
@@ -164,6 +201,7 @@ GAME_START:
 		FALLING_EDGE_TRIGGER:
 			; When nothing is pressed, we simulate falling edge trigger
 			; Which mean key is only processed when user release the button
+			rcall CHECK_TIMELOSS
 			mov temp, last_key_pressed
 			cpi temp, 0x00
 			brne KEY_CHECK
@@ -193,7 +231,6 @@ GAME_START:
 		; Clear last key pressed
 		ldi temp_1, 0x00
 		mov last_key_pressed, temp_1
-
 		; Check for ENTER and CLEAR
 		cpi temp, 0b00100001
 		breq KEY_ENTER
@@ -237,6 +274,7 @@ GAME_START:
 		rjmp SCANNING_KEYPAD
 
 		KEY_ENTER:
+			rcall CHECK_NUM 
 			rjmp SCANNING_KEYPAD
 		KEY_CLEAR:
 			ldi guess, 0
@@ -245,7 +283,7 @@ GAME_START:
 			rjmp PRINT_GUESS
 		KEY_0:
 			tst guess
-			breq SCANNING_KEYPAD
+			breq SCANNING_KEYPAD_JUMPER
 			mov guess, temp_1
 			ldi temp_1, 0x30
 			mov A, temp_1
@@ -314,6 +352,113 @@ GAME_START:
 			mov A, temp_1
 			rcall PRINT_KEY
 			rjmp SCANNING_KEYPAD
+
+		SCANNING_KEYPAD_JUMPER:
+			rjmp SCANNING_KEYPAD
+
+		CHECK_TIMELOSS:
+			cpi timerLost,0x01
+			breq TEST
+			ret
+
+		CHECK_NUM:
+			cp number,guess
+			breq TEST
+			brne TRY_AGAIN
+			; ldi guess, 0
+			; rcall CLEAR_SECOND_ROW
+			; rcall LOADBYTE
+			; rjmp PRINT_GUESS
+			; ret
+
+		TRY_AGAIN:
+			cp guess, number
+			brlt KURANG
+			brge LEBIH_SAMA
+
+		KURANG:
+			ldi r27, 0b11000000
+			out PORTA, r27
+			rjmp CONTINUE
+
+		LEBIH_SAMA:
+			cp guess, number
+			breq TEST
+			; masih kelebihan
+			ldi r27, 0b00001100
+			out PORTA, r27
+			rjmp CONTINUE
+
+		CONTINUE:
+			ldi guess, 0
+			rcall CLEAR_SECOND_ROW
+			rcall LOADBYTE
+			rjmp PRINT_GUESS
+			ret
+
+		TEST:
+			; guess correct led
+			ldi r27, 0b00110000
+			out PORTA, r27
+
+			cpi levelIndicator, 0x39
+			breq forever
+			dec flag_game_start
+			ldi timerIndicator, 0x00
+			mov handler2, timerIndicator
+			ldi guess, 0
+			rcall CLEAR_SECOND_ROW
+			rcall LOADBYTE
+			rcall GO_DOWN
+			rcall DECIDER
+			rcall LOADBYTE
+			rjmp GENERATE_NUMBER
+		
+		DECIDER:
+			cpi timerLost, 0x01
+			breq LOSE_LEVEL
+			inc score
+			rcall SCORE_WRITE
+			cpi levelIndicator, 0x38
+			breq PRINT_FINAL
+			rcall READY_WRITE
+			rcall LOADBYTE
+			ret
+			
+		PRINT_FINAL:
+			rcall FINAL_WRITE
+			rcall LOADBYTE
+			ret		
+
+		LOSE_LEVEL:
+			cpi levelIndicator,0x38
+			breq PRINT_FINAL
+			rcall NOOB_WRITE
+			ret
+
+		forever:
+			rcall CLEAR_LCD
+			rjmp forever
+
+NEXT_GAME:
+		ldi r27, 0b00000000
+		out PORTA, r27
+		cp handler2,r1
+		brne DO_NOTHING
+		inc handler2
+		rcall CHANGE_LEVEL
+		rcall CLEAR_SECOND_ROW
+		rcall LOADBYTE
+		rcall GO_DOWN
+		ldi r26,0x01
+		ldi timerIndicator,0x01
+		ldi timerLost,0x00
+		mov flag_game_start,r26
+		reti
+
+DO_NOTHING:
+	reti
+	
 
 CLEAR_LCD:
 	cbi PORTA,1 ; CLR RS
@@ -388,6 +533,10 @@ LOADBYTE:
 	adiw ZL,1 ; Increase Z registers
 	rjmp LOADBYTE
 
+END_LCD:
+	sei 
+	ret
+
 WRITE_TEXT:
 	sbi PORTA, 1 ; SETB RS
 	out PORTB, A
@@ -395,9 +544,105 @@ WRITE_TEXT:
 	cbi PORTA, 0 ; CLR EN
 	ret
 
-END_LCD:
-	sei 
+GO_DOWN:
+	cbi PORTA, 1
+	ldi PB, 0xC0
+	out PORTB, PB
+	sbi PORTA, 0
+	cbi PORTA, 0
 	ret
+
+LEVEL_WRITE:
+	ldi ZH, high(level * 2)
+	ldi ZL, low(level * 2)
+	rcall LOADBYTE
+	ldi PB, 0x30
+	mov A, PB
+	rcall WRITE_TEXT
+	mov A, levelIndicator
+	rcall WRITE_TEXT
+	rcall SEPARATOR_WRITE
+
+	ret
+
+SCORE_WRITE:
+	cbi PORTA, 1
+	ldi PB, 0x90
+	out PORTB, PB
+	sbi PORTA, 0
+	cbi PORTA, 0
+	mov PB,score
+	mov A,PB
+	rcall WRITE_TEXT
+	ret
+
+POINT_WRITE:
+	ldi ZH, high(point * 2)
+	ldi ZL, low(point * 2)
+	rcall LOADBYTE
+	ldi PB, 0x30
+	mov A, PB
+	rcall WRITE_TEXT
+	ldi PB, 0x30
+	mov A, PB
+	rcall WRITE_TEXT
+	rcall SEPARATOR_WRITE
+	ret
+
+TIME_WRITE:
+	ldi ZH, high(time * 2)
+	ldi ZL, low(time * 2)
+	rcall LOADBYTE
+	ret
+
+CHANGE_LEVEL_LCD:
+	subi levelIndicator, -1
+	mov A, levelIndicator
+	cbi PORTA, 1
+	ldi PB, 0x88
+	out PORTB, PB
+	sbi PORTA, 0
+	cbi PORTA, 0
+	rcall WRITE_TEXT
+	ret
+
+SEPARATOR_WRITE:
+	ldi ZH, high(pipe * 2)
+	ldi ZL, low(pipe * 2)
+	rcall LOADBYTE
+	ret	
+
+FINAL_WRITE:
+	ldi ZH, high(final * 2)
+	ldi ZL, low(final * 2)
+	rcall LOADBYTE
+	ret	
+
+READY_WRITE:
+	rcall GO_DOWN
+	ldi ZH, high(ready * 2)
+	ldi ZL, low(ready * 2)
+	rcall LOADBYTE
+	ret
+	
+NOOB_WRITE:
+	ldi ZH, high(noob * 2)
+	ldi ZL, low(noob * 2)
+	rcall LOADBYTE
+	ret
+
+;=================================================
+;CHANGE LEVEL
+;=================================================
+CHANGE_LEVEL:
+		ldi temp, 0
+		mov counter, temp
+		ldi temp, 5
+		mov tenths, temp
+		ldi temp, 0x0A
+		mov ones, temp
+		rcall CHANGE_LEVEL_LCD
+		ret
 
 ;=====================================================================
 ; TIMER INTERRUPT ON OVERFLOW SUBROUTINE
@@ -405,6 +650,8 @@ END_LCD:
 ; A 1 second subroutine for The timer
 
 ISR_TOV0:
+	cpi timerIndicator, 0
+	breq BACK
 	mov keep_1, temp
 	mov keep_2, temp_1
 	ldi temp, one_sec_overflow
@@ -433,16 +680,10 @@ ISR_TOV0:
 		rjmp PRINT_TIMER_DISPLAY
 	
 	PRINT_TIMER_DISPLAY:
-		mov temp, tenths
-		mov temp_1, ones
-		or temp, temp_1
-		cpi temp, 0
-		breq TIMER_RUN_OUT		
-
 		ldi temp, 0
 		mov counter, temp
 		cbi PORTA, 1
-		ldi PB, 0x80	; Move to DRAM 0, subject to change
+		ldi PB, 0x98
 		out PORTB, PB
 		sbi PORTA, 0
 		cbi PORTA, 0
@@ -457,29 +698,53 @@ ISR_TOV0:
 		rjmp RETURN_TIME_INTERRUPT
 
 	TIMER_RUN_OUT:
-		ldi temp, 6
-		mov tenths, temp
 		ldi temp, 0
-		mov ones, temp
 		mov counter, temp
-		cbi PORTA, 1
-		ldi PB, 0x80	; Move to DRAM 0, subject to change
-		out PORTB, PB
-		sbi PORTA, 0
-		cbi PORTA, 0
-		ldi ZH, high(2 * timesUp) ; Load high part of byte address into ZH
-		ldi ZL, low(2 * timesUp) ; Load high part of byte address into ZH
-		rcall LOADBYTE
+		ldi temp, 5
+		mov tenths, temp
+		ldi temp, 0x0A
+		mov ones, temp
+		ldi timerLost, 0x01
 		rjmp RETURN_TIME_INTERRUPT
 	
 	RETURN_TIME_INTERRUPT:
 		mov temp, keep_1
 		mov temp_1, keep_2
 		reti
+	
+	BACK:
+		reti
 
 ;=====================================================================
 ; Data
 ;=====================================================================
+
+startMessage:
+.db "Welcome to Guess the Number!",0
+
+byMessage:
+.db "   By:Andre Cahya & Nafis",0
+
+noob:
+.db "    Noob...next level...",0
+
+ready:
+.db "      Nice... ready?",0
+
+final:
+.db "   OH NOES! Final Level !!!",0
+
+level:
+.db " Level:",0
+
+point:
+.db "Point:",0
+
+time:
+.db "Time:",0
+
+pipe:
+.db "|",0
 
 timesUp:
 .db "TIMES UP!",0 
@@ -491,7 +756,7 @@ lower:
 .db "LOWER!",0
 
 guess_text:
-.db "GUESS:", 0
+.db "GUESS:",0
 
 clear_second_row_text:
-.db "        ", 0
+.db "                             ", 0
