@@ -1,117 +1,126 @@
 <ASSEMBLER_INFO>
- <VERSION>2.1.42</VERSION>
+ <VERSION>2.1.12</VERSION>
  <DEVICE>ATmega8515</DEVICE>
- <WORKING_DIR>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud</WORKING_DIR>
+ <WORKING_DIR>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok</WORKING_DIR>
  <INCLUDE_PATH>
   <DIR>C:\Program Files (x86)\Atmel\AVR Tools\AvrAssembler2\Appnotes</DIR>
  </INCLUDE_PATH>
- <SOURCE_FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</SOURCE_FILE>
+ <SOURCE_FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</SOURCE_FILE>
  <INCLUDED_FILES>
   <FILE>C:\Program Files (x86)\Atmel\AVR Tools\AvrAssembler2\Appnotes\m8515def.inc</FILE>
  </INCLUDED_FILES>
  <OBJECT_FILES>
-  <FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.obj</FILE>
+  <FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.obj</FILE>
  </OBJECT_FILES>
  <HEX_FILES>
-  <FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.hex</FILE>
+  <FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.hex</FILE>
  </HEX_FILES>
  <OUTPUT_FILES>
-  <FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.map</FILE>
+  <FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.map</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <MAIN><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>83</LINE></MAIN>
-  <SET_GAME_START><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>63</LINE></SET_GAME_START>
-  <NEXT_GAME><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>443</LINE></NEXT_GAME>
-  <ISR_TOV0><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>652</LINE></ISR_TOV0>
-  <DO_NONE><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>80</LINE></DO_NONE>
-  <CLEAR_LCD><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>463</LINE></CLEAR_LCD>
-  <LEVEL_WRITE><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>555</LINE></LEVEL_WRITE>
-  <POINT_WRITE><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>579</LINE></POINT_WRITE>
-  <TIME_WRITE><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>592</LINE></TIME_WRITE>
-  <INIT_STACK><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>85</LINE></INIT_STACK>
-  <INITIALIZER><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>90</LINE></INITIALIZER>
-  <INIT_LCD><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>96</LINE></INIT_LCD>
-  <WELCOME><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>113</LINE></WELCOME>
-  <startMessage><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>722</LINE></startMessage>
-  <LOADBYTE><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>527</LINE></LOADBYTE>
-  <GO_DOWN><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>547</LINE></GO_DOWN>
-  <byMessage><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>725</LINE></byMessage>
-  <INIT_TIMER><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>123</LINE></INIT_TIMER>
-  <INIT_INTERRUPT><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>132</LINE></INIT_INTERRUPT>
-  <INIT_KEYPAD><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>139</LINE></INIT_KEYPAD>
-  <INIT_GAME_DATA><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>143</LINE></INIT_GAME_DATA>
-  <GENERATE_NUMBER><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>151</LINE></GENERATE_NUMBER>
-  <CHECK_SECOND_DIGIT><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>160</LINE></CHECK_SECOND_DIGIT>
-  <TEST_IF_GAME_START><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>167</LINE></TEST_IF_GAME_START>
-  <GAME_START><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>171</LINE></GAME_START>
-  <PRINT_GUESS><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>178</LINE></PRINT_GUESS>
-  <guess_text><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>758</LINE></guess_text>
-  <SCANNING_KEYPAD><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>188</LINE></SCANNING_KEYPAD>
-  <POWER_UP_ROW><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>189</LINE></POWER_UP_ROW>
-  <READ_COLUMN><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>195</LINE></READ_COLUMN>
-  <DELAY><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>508</LINE></DELAY>
-  <POWER_UP_COLUMN><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>210</LINE></POWER_UP_COLUMN>
-  <FALLING_EDGE_TRIGGER><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>201</LINE></FALLING_EDGE_TRIGGER>
-  <CHECK_TIMELOSS><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>359</LINE></CHECK_TIMELOSS>
-  <KEY_CHECK><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>230</LINE></KEY_CHECK>
-  <READ_ROW><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>216</LINE></READ_ROW>
-  <KEY_ENTER><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>276</LINE></KEY_ENTER>
-  <KEY_CLEAR><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>279</LINE></KEY_CLEAR>
-  <MULTIPLY_BY_TEN><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>477</LINE></MULTIPLY_BY_TEN>
-  <KEY_0><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>284</LINE></KEY_0>
-  <KEY_1><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>292</LINE></KEY_1>
-  <KEY_2><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>299</LINE></KEY_2>
-  <KEY_3><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>306</LINE></KEY_3>
-  <KEY_4><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>313</LINE></KEY_4>
-  <KEY_5><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>320</LINE></KEY_5>
-  <KEY_6><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>327</LINE></KEY_6>
-  <KEY_7><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>334</LINE></KEY_7>
-  <KEY_8><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>341</LINE></KEY_8>
-  <KEY_9><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>348</LINE></KEY_9>
-  <CHECK_NUM><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>364</LINE></CHECK_NUM>
-  <CLEAR_SECOND_ROW><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>517</LINE></CLEAR_SECOND_ROW>
-  <SCANNING_KEYPAD_JUMPER><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>356</LINE></SCANNING_KEYPAD_JUMPER>
-  <PRINT_KEY><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>483</LINE></PRINT_KEY>
-  <TEST><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>399</LINE></TEST>
-  <TRY_AGAIN><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>374</LINE></TRY_AGAIN>
-  <KURANG><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>379</LINE></KURANG>
-  <LEBIH_SAMA><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>384</LINE></LEBIH_SAMA>
-  <CONTINUE><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>392</LINE></CONTINUE>
-  <forever><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>439</LINE></forever>
-  <DECIDER><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>417</LINE></DECIDER>
-  <LOSE_LEVEL><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>433</LINE></LOSE_LEVEL>
-  <SCORE_WRITE><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>568</LINE></SCORE_WRITE>
-  <PRINT_FINAL><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>428</LINE></PRINT_FINAL>
-  <READY_WRITE><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>621</LINE></READY_WRITE>
-  <FINAL_WRITE><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>615</LINE></FINAL_WRITE>
-  <NOOB_WRITE><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>628</LINE></NOOB_WRITE>
-  <DO_NOTHING><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>459</LINE></DO_NOTHING>
-  <CHANGE_LEVEL><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>637</LINE></CHANGE_LEVEL>
-  <SET_SECOND_DIGIT><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>496</LINE></SET_SECOND_DIGIT>
-  <SET_FIRST_DIGIT><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>489</LINE></SET_FIRST_DIGIT>
-  <PRINT_THE_KEY><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>504</LINE></PRINT_THE_KEY>
-  <WRITE_TEXT><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>540</LINE></WRITE_TEXT>
-  <clear_second_row_text><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>761</LINE></clear_second_row_text>
-  <END_LCD><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>536</LINE></END_LCD>
-  <level><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>737</LINE></level>
-  <SEPARATOR_WRITE><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>609</LINE></SEPARATOR_WRITE>
-  <point><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>740</LINE></point>
-  <time><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>743</LINE></time>
-  <CHANGE_LEVEL_LCD><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>598</LINE></CHANGE_LEVEL_LCD>
-  <pipe><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>746</LINE></pipe>
-  <final><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>734</LINE></final>
-  <ready><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>731</LINE></ready>
-  <noob><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>728</LINE></noob>
-  <BACK><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>715</LINE></BACK>
-  <RETURN_TIME_INTERRUPT><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>710</LINE></RETURN_TIME_INTERRUPT>
-  <DECREASE_TIMER_DISPLAY><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>662</LINE></DECREASE_TIMER_DISPLAY>
-  <NORMAL_DECREMENT><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>672</LINE></NORMAL_DECREMENT>
-  <CHECK_TIME_RUN_OUT><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>667</LINE></CHECK_TIME_RUN_OUT>
-  <TENTHS_DECREMENT><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>676</LINE></TENTHS_DECREMENT>
-  <TIMER_RUN_OUT><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>700</LINE></TIMER_RUN_OUT>
-  <PRINT_TIMER_DISPLAY><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>682</LINE></PRINT_TIMER_DISPLAY>
-  <timesUp><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>749</LINE></timesUp>
-  <higher><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>752</LINE></higher>
-  <lower><FILE>D:\University Related Files\Semester 3 2018-2019\POK\TA\GitGud\TA.asm</FILE><LINE>755</LINE></lower>
+  <MAIN><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>83</LINE></MAIN>
+  <SET_GAME_START><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>63</LINE></SET_GAME_START>
+  <NEXT_GAME><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>469</LINE></NEXT_GAME>
+  <ISR_TOV0><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>704</LINE></ISR_TOV0>
+  <DO_NONE><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>80</LINE></DO_NONE>
+  <CLEAR_LCD><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>489</LINE></CLEAR_LCD>
+  <LEVEL_WRITE><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>581</LINE></LEVEL_WRITE>
+  <POINT_WRITE><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>605</LINE></POINT_WRITE>
+  <TIME_WRITE><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>618</LINE></TIME_WRITE>
+  <INIT_STACK><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>85</LINE></INIT_STACK>
+  <INITIALIZER><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>90</LINE></INITIALIZER>
+  <INIT_LCD><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>96</LINE></INIT_LCD>
+  <WELCOME><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>113</LINE></WELCOME>
+  <startMessage><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>799</LINE></startMessage>
+  <LOADBYTE><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>553</LINE></LOADBYTE>
+  <GO_DOWN><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>573</LINE></GO_DOWN>
+  <byMessage><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>802</LINE></byMessage>
+  <INIT_TIMER><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>123</LINE></INIT_TIMER>
+  <INIT_INTERRUPT><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>132</LINE></INIT_INTERRUPT>
+  <INIT_KEYPAD><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>139</LINE></INIT_KEYPAD>
+  <INIT_GAME_DATA><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>143</LINE></INIT_GAME_DATA>
+  <GENERATE_NUMBER><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>151</LINE></GENERATE_NUMBER>
+  <CHECK_SECOND_DIGIT><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>160</LINE></CHECK_SECOND_DIGIT>
+  <TEST_IF_GAME_START><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>167</LINE></TEST_IF_GAME_START>
+  <GAME_START><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>171</LINE></GAME_START>
+  <PRINT_GUESS><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>178</LINE></PRINT_GUESS>
+  <guess_text><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>835</LINE></guess_text>
+  <SCANNING_KEYPAD><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>188</LINE></SCANNING_KEYPAD>
+  <POWER_UP_ROW><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>189</LINE></POWER_UP_ROW>
+  <READ_COLUMN><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>195</LINE></READ_COLUMN>
+  <DELAY><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>534</LINE></DELAY>
+  <POWER_UP_COLUMN><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>210</LINE></POWER_UP_COLUMN>
+  <FALLING_EDGE_TRIGGER><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>201</LINE></FALLING_EDGE_TRIGGER>
+  <CHECK_TIMELOSS><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>359</LINE></CHECK_TIMELOSS>
+  <KEY_CHECK><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>230</LINE></KEY_CHECK>
+  <READ_ROW><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>216</LINE></READ_ROW>
+  <KEY_ENTER><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>276</LINE></KEY_ENTER>
+  <KEY_CLEAR><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>279</LINE></KEY_CLEAR>
+  <MULTIPLY_BY_TEN><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>503</LINE></MULTIPLY_BY_TEN>
+  <KEY_0><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>284</LINE></KEY_0>
+  <KEY_1><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>292</LINE></KEY_1>
+  <KEY_2><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>299</LINE></KEY_2>
+  <KEY_3><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>306</LINE></KEY_3>
+  <KEY_4><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>313</LINE></KEY_4>
+  <KEY_5><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>320</LINE></KEY_5>
+  <KEY_6><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>327</LINE></KEY_6>
+  <KEY_7><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>334</LINE></KEY_7>
+  <KEY_8><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>341</LINE></KEY_8>
+  <KEY_9><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>348</LINE></KEY_9>
+  <CHECK_NUM><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>364</LINE></CHECK_NUM>
+  <CLEAR_SECOND_ROW><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>543</LINE></CLEAR_SECOND_ROW>
+  <SCANNING_KEYPAD_JUMPER><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>356</LINE></SCANNING_KEYPAD_JUMPER>
+  <PRINT_KEY><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>509</LINE></PRINT_KEY>
+  <TEST><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>412</LINE></TEST>
+  <TRY_AGAIN><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>374</LINE></TRY_AGAIN>
+  <KURANG><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>379</LINE></KURANG>
+  <LEBIH_SAMA><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>388</LINE></LEBIH_SAMA>
+  <LOWER_WRITE><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>673</LINE></LOWER_WRITE>
+  <DELAY_01><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>770</LINE></DELAY_01>
+  <CONTINUE><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>400</LINE></CONTINUE>
+  <HIGHER_WRITE><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>666</LINE></HIGHER_WRITE>
+  <forever><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>453</LINE></forever>
+  <DECIDER><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>429</LINE></DECIDER>
+  <LOSE_LEVEL><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>447</LINE></LOSE_LEVEL>
+  <SCORE_WRITE><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>594</LINE></SCORE_WRITE>
+  <PRINT_FINAL><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>440</LINE></PRINT_FINAL>
+  <READY_WRITE><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>659</LINE></READY_WRITE>
+  <FINAL_WRITE><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>641</LINE></FINAL_WRITE>
+  <NOOB_WRITE><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>680</LINE></NOOB_WRITE>
+  <END_SCORE_WRITE><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>647</LINE></END_SCORE_WRITE>
+  <WRITE_TEXT><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>566</LINE></WRITE_TEXT>
+  <THANK_YOU_WRITE><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>653</LINE></THANK_YOU_WRITE>
+  <eternal><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>466</LINE></eternal>
+  <DO_NOTHING><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>485</LINE></DO_NOTHING>
+  <CHANGE_LEVEL><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>689</LINE></CHANGE_LEVEL>
+  <SET_SECOND_DIGIT><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>522</LINE></SET_SECOND_DIGIT>
+  <SET_FIRST_DIGIT><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>515</LINE></SET_FIRST_DIGIT>
+  <PRINT_THE_KEY><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>530</LINE></PRINT_THE_KEY>
+  <clear_second_row_text><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>838</LINE></clear_second_row_text>
+  <END_LCD><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>562</LINE></END_LCD>
+  <level><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>814</LINE></level>
+  <SEPARATOR_WRITE><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>635</LINE></SEPARATOR_WRITE>
+  <point><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>817</LINE></point>
+  <time><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>820</LINE></time>
+  <CHANGE_LEVEL_LCD><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>624</LINE></CHANGE_LEVEL_LCD>
+  <pipe><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>823</LINE></pipe>
+  <final><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>811</LINE></final>
+  <endScore><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>792</LINE></endScore>
+  <thankyou><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>795</LINE></thankyou>
+  <ready><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>808</LINE></ready>
+  <higher><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>829</LINE></higher>
+  <lower><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>832</LINE></lower>
+  <noob><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>805</LINE></noob>
+  <BACK><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>767</LINE></BACK>
+  <RETURN_TIME_INTERRUPT><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>762</LINE></RETURN_TIME_INTERRUPT>
+  <DECREASE_TIMER_DISPLAY><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>714</LINE></DECREASE_TIMER_DISPLAY>
+  <NORMAL_DECREMENT><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>724</LINE></NORMAL_DECREMENT>
+  <CHECK_TIME_RUN_OUT><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>719</LINE></CHECK_TIME_RUN_OUT>
+  <TENTHS_DECREMENT><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>728</LINE></TENTHS_DECREMENT>
+  <TIMER_RUN_OUT><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>752</LINE></TIMER_RUN_OUT>
+  <PRINT_TIMER_DISPLAY><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>734</LINE></PRINT_TIMER_DISPLAY>
+  <L1><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>779</LINE></L1>
+  <timesUp><FILE>D:\Semester 3\POK C\Final_Project_Andre_Cahya_NAfis\c5-pok\TA.asm</FILE><LINE>826</LINE></timesUp>
  </LABELS>
 </ASSEMBLER_INFO>
