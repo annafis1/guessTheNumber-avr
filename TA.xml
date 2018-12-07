@@ -3,10 +3,10 @@
    <General>
       <Build>2005</Build>
       <Position>
-         <top>224</top>
-         <bottom>871</bottom>
-         <left>745</left>
-         <right>1585</right>
+         <top>127</top>
+         <bottom>774</bottom>
+         <left>629</left>
+         <right>1469</right>
       </Position>
       <StayOnTop>1</StayOnTop>
       <Target>ATmega8515</Target>
@@ -15,8 +15,8 @@
       <LCD>
          <Name>LCD1</Name>
          <Position>
-            <top>12</top>
-            <left>75</left>
+            <top>14</top>
+            <left>165</left>
          </Position>
          <DisplayConfig>
             <columns>28</columns>
@@ -68,7 +68,7 @@
             <Invert>0</Invert>
          </Config>
          <Config index="2">
-            <Name>Button2</Name>
+            <Name></Name>
             <PortPin>
                <Port>PORTA</Port>
                <Bit>6</Bit>
@@ -76,7 +76,7 @@
             <Invert>0</Invert>
          </Config>
          <Config index="3">
-            <Name>Button3</Name>
+            <Name></Name>
             <PortPin>
                <Port>PORTA</Port>
                <Bit>7</Bit>
@@ -89,8 +89,8 @@
       <LEDs>
          <Name>LEDs1</Name>
          <Position>
-            <top>136</top>
-            <left>558</left>
+            <top>97</top>
+            <left>503</left>
          </Position>
          <Config index="0">
             <Color>Red</Color>
@@ -255,19 +255,19 @@
                <PCKey>32</PCKey>
             </Button>
             <Button index="12">
-               <Caption>Up</Caption>
+               <Caption></Caption>
                <PCKey>16</PCKey>
             </Button>
             <Button index="13">
-               <Caption>Down</Caption>
+               <Caption></Caption>
                <PCKey>4</PCKey>
             </Button>
             <Button index="14">
-               <Caption>Right</Caption>
+               <Caption></Caption>
                <PCKey>2097157</PCKey>
             </Button>
             <Button index="15">
-               <Caption>Left</Caption>
+               <Caption></Caption>
                <PCKey>100</PCKey>
             </Button>
          </Buttons>
