@@ -36,7 +36,7 @@
             </EnablePin>
             <RW_Pin>
                <WriteOnly>0</WriteOnly>
-               <Port>PORTA</Port>
+               <Port>PORTE</Port>
                <Bit>2</Bit>
             </RW_Pin>
             <RS_Pin>
@@ -94,25 +94,25 @@
          </Position>
          <Config index="0">
             <Color>Red</Color>
-            <Name>0</Name>
+            <Name></Name>
             <PortPin>
-               <Port>PORTA</Port>
+               <Port>PORTE</Port>
                <Bit>0</Bit>
             </PortPin>
             <Invert>0</Invert>
          </Config>
          <Config index="1">
             <Color>Red</Color>
-            <Name>1</Name>
+            <Name></Name>
             <PortPin>
-               <Port>PORTA</Port>
+               <Port>PORTE</Port>
                <Bit>1</Bit>
             </PortPin>
             <Invert>0</Invert>
          </Config>
          <Config index="2">
-            <Color>Yellow</Color>
-            <Name></Name>
+            <Color>Blue</Color>
+            <Name>Lebih</Name>
             <PortPin>
                <Port>PORTA</Port>
                <Bit>2</Bit>
@@ -138,8 +138,8 @@
             <Invert>0</Invert>
          </Config>
          <Config index="5">
-            <Color>Red</Color>
-            <Name>Kecil</Name>
+            <Color>Green</Color>
+            <Name>BENAR</Name>
             <PortPin>
                <Port>PORTA</Port>
                <Bit>5</Bit>
@@ -147,8 +147,8 @@
             <Invert>0</Invert>
          </Config>
          <Config index="6">
-            <Color>Yellow</Color>
-            <Name></Name>
+            <Color>Red</Color>
+            <Name>Kecil</Name>
             <PortPin>
                <Port>PORTA</Port>
                <Bit>6</Bit>
@@ -156,8 +156,8 @@
             <Invert>0</Invert>
          </Config>
          <Config index="7">
-            <Color>Yellow</Color>
-            <Name></Name>
+            <Color>Red</Color>
+            <Name>Kecil</Name>
             <PortPin>
                <Port>PORTA</Port>
                <Bit>7</Bit>
