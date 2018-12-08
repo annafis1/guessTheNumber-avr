@@ -10,7 +10,7 @@
 .include "m8515def.inc"
 .def last_key_pressed = r14
 .def flag_game_start = r15
-.def temp = r16 ; temporary register
+.def temp = r16
 .def temp_1 = r17
 .def number = r18
 .def number_digit_0 = r19
@@ -121,7 +121,7 @@ WELCOME:
 	rcall LOADBYTE
 
 INIT_TIMER:
-	ldi temp, (1<<CS01 | 1<<CS00)	; set timer control register, 1/8 of Ck
+	ldi temp, (1<<CS01 | 1<<CS00)	; set timer control register, 1/64 of Ck
 	out TCCR0, temp
 	ldi temp, 1<<TOV0	; Set interrupt in timer 0 on overflow
 	out TIFR, temp
@@ -169,8 +169,6 @@ GENERATE_NUMBER:
 		breq GENERATE_NUMBER
 
 GAME_START:
-	; Insert LED and LCD related things here
-
 	; Failsafe for broken SREG by timer interrupt
 	tst flag_game_start
 	breq GENERATE_NUMBER
@@ -365,11 +363,6 @@ GAME_START:
 			cp number,guess
 			breq TEST
 			brne TRY_AGAIN
-			; ldi guess, 0
-			; rcall CLEAR_SECOND_ROW
-			; rcall LOADBYTE
-			; rjmp PRINT_GUESS
-			; ret
 
 		TRY_AGAIN:
 			cp guess, number
@@ -509,10 +502,10 @@ MULTIPLY_BY_TEN:
 PRINT_KEY:
 	mov A, temp_1
 	mov temp_1, guess
-	subi temp_1, 10
-	brsh SET_SECOND_DIGIT
+	subi temp_1, 10			; If current guess is higher than 10
+	brsh SET_SECOND_DIGIT	; that means the pressed key is on second digit
 
-	SET_FIRST_DIGIT:
+	SET_FIRST_DIGIT:		; else the pressed key is on first digit
 		cbi PORTA, 1
 		ldi PB, location_of_guess_first_digit
 		out PORTB, PB
@@ -531,7 +524,7 @@ PRINT_KEY:
 		rcall WRITE_TEXT
 		ret
 
-DELAY:
+DELAY:	; A single cycle delay that somehow makes the keypad works
 	nop
 	ret
 
@@ -540,7 +533,7 @@ DELAY:
 ;==========================================================
 ;
 
-CLEAR_SECOND_ROW:
+CLEAR_SECOND_ROW:	; Literally clearing the second row by printing spaces
 	cbi PORTA, 1
 	ldi PB, 0xC0
 	out PORTB, PB
@@ -701,37 +694,37 @@ CHANGE_LEVEL:
 ;=====================================================================
 ; A 1 second subroutine for The timer
 
-ISR_TOV0:
+ISR_TOV0:	; One second of timer is approximately 24 times overflow on clock/64
 	cpi timerIndicator, 0
 	breq BACK
 	mov keep_1, temp
 	mov keep_2, temp_1
 	ldi temp, one_sec_overflow
-	inc counter
-	cp counter, temp
+	inc counter					; Keep counting the number of overflow
+	cp counter, temp			; until it reaches 24
 	brne RETURN_TIME_INTERRUPT
 
 	DECREASE_TIMER_DISPLAY:
-		ldi temp, 0x00
-		cp ones, temp
-		brne NORMAL_DECREMENT
+		ldi temp, 0x00			; Checking the ones of the seconds
+		cp ones, temp			; If it is 0, we got a slightly more complex case
+		brne NORMAL_DECREMENT	; else it's a normal and easy decrement
 	
-	CHECK_TIME_RUN_OUT:
-		cp tenths, temp
-		brne TENTHS_DECREMENT
+	CHECK_TIME_RUN_OUT:			; If the ones is 0, then we have to check the tens
+		cp tenths, temp			; If the tens is 0 too, the timer have reach 00 (End)
+		brne TENTHS_DECREMENT	; else it just a decrement of tens (Like from 50 to 49)
 		rjmp TIMER_RUN_OUT
 	
-	NORMAL_DECREMENT:
+	NORMAL_DECREMENT:			; On normal decrement, just decrease the ones and print the timer
 		dec ones
 		rjmp PRINT_TIMER_DISPLAY
 	
-	TENTHS_DECREMENT:
+	TENTHS_DECREMENT:			; On tenths decrement, we decrease the tenths and set ones to 9
 		ldi temp, 9
 		mov ones, temp
 		dec tenths
 		rjmp PRINT_TIMER_DISPLAY
 	
-	PRINT_TIMER_DISPLAY:
+	PRINT_TIMER_DISPLAY:		; Simple printing on a predetermined location
 		ldi temp, 0
 		mov counter, temp
 		cbi PORTA, 1
@@ -749,7 +742,7 @@ ISR_TOV0:
 		rcall WRITE_TEXT
 		rjmp RETURN_TIME_INTERRUPT
 
-	TIMER_RUN_OUT:
+	TIMER_RUN_OUT:				; If the timer run out, well then the level is lost
 		ldi temp, 0
 		mov counter, temp
 		ldi temp, 5
@@ -786,8 +779,6 @@ DELAY_01:
 ;=====================================================================
 ; Data
 ;=====================================================================
-
-
 
 endScore:
 .db "You got:",0
