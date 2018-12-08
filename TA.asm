@@ -3,6 +3,28 @@
 ; Compiler		: AVRASM
 ;====================================================================
 
+                                        
+; _____ _____ _____ _____ _____          
+;|   __|  |  |   __|   __|   __|         
+;|  |  |  |  |   __|__   |__   |         
+;|_____|_____|_____|_____|_____|         
+;                                        
+;                                        
+; _____ _____ _____                      
+;|_   _|  |  |   __|                     
+;  | | |     |   __|                     
+;  |_| |__|__|_____|                     
+;                                        
+;                                     __ 
+; _____ _____ _____ _____ _____ _____|  |
+;|   | |  |  |     | __  |   __| __  |  |
+;| | | |  |  | | | | __ -|   __|    -|__|
+;|_|___|_____|_|_|_|_____|_____|__|__|__|
+;                                        
+;
+;
+; BY: ANDRE,CAHYA AND NAFIS
+;
 ;====================================================================
 ; DEFINITIONS
 ;====================================================================
@@ -49,32 +71,32 @@
 ;====================================================================
 
 .org $00
-rjmp MAIN
+rjmp MAIN // Main game as a start function
 .org $01
-rjmp SET_GAME_START
+rjmp SET_GAME_START // Starts the game
 .org $02
-rjmp NEXT_GAME
+rjmp NEXT_GAME // Next level 
 .org $07
-rjmp ISR_TOV0
+rjmp ISR_TOV0 // Timer overflow subroutine
 
 ;====================================================================
 ; CODE SEGMENT
 ;====================================================================
-SET_GAME_START:
-	cp handler1, r1 
-	brne DO_NONE
-	inc handler1
+SET_GAME_START: // As set game start is a subroutine, we need to anticipate suppose that 
+	cp handler1, r1 //the user presses the start 2 or more times to be disabled so that the user does not break the program
+	brne DO_NONE // DO NONE  ignores the sub routine
+	inc handler1 // increments handler1 and 2
 	inc handler2
-	ldi timerIndicator, 0x01
-	ldi levelIndicator, 0x31
-	ldi temp, 0x30
+	ldi timerIndicator, 0x01 // sets the timer
+	ldi levelIndicator, 0x31 // sets the starting level
+	ldi temp, 0x30 // score starts from 0
 	mov score, temp
-	rcall CLEAR_LCD
-	rcall LEVEL_WRITE
+	rcall CLEAR_LCD // clears
+	rcall LEVEL_WRITE // writes level point and write
 	rcall POINT_WRITE
 	rcall TIME_WRITE
 	ldi temp, 1
-	mov flag_game_start, temp
+	mov flag_game_start, temp // indicate game start
 	reti
 
 DO_NONE:
@@ -110,7 +132,7 @@ INIT_LCD:
 	sbi PORTA,0 ; SETB EN
 	cbi PORTA,0 ; CLR EN
 
-WELCOME:
+WELCOME: // Welcome message for the user
 	rcall CLEAR_LCD
 	ldi ZH, high(startMessage * 2)
 	ldi ZL, low(startMessage * 2)
@@ -129,7 +151,7 @@ INIT_TIMER:
 	out TIMSK, temp
 	ser temp
 
-INIT_INTERRUPT:
+INIT_INTERRUPT: // initialize global ecternal interrupt
 	ldi temp, 0b00001010
 	out MCUCR, temp
 	ldi temp, 0b11000000
@@ -148,7 +170,7 @@ INIT_GAME_DATA:
 	ldi number_digit_1, 0
 	ldi guess, 0
 
-GENERATE_NUMBER:
+GENERATE_NUMBER: // generate number function to create the number
 	inc number
 	inc number_digit_0
 
@@ -354,35 +376,35 @@ GAME_START:
 		SCANNING_KEYPAD_JUMPER:
 			rjmp SCANNING_KEYPAD
 
-		CHECK_TIMELOSS:
-			cpi timerLost,0x01
-			breq TEST
+		CHECK_TIMELOSS: // Function to check if the user has lost the level by time
+			cpi timerLost,0x01 // when the time is over timerLost values becomes 0x01, hence indicates that the user has lost by time
+			breq TEST// if it equals  goes to TEST
 			ret
 
 		CHECK_NUM:
-			cp number,guess
-			breq TEST
-			brne TRY_AGAIN
+			cp number,guess // check if the users number is the same as the number inside the register
+			breq TEST// if so, goes to TEST
+			brne TRY_AGAIN // if its not equal goes to try again
 
-		TRY_AGAIN:
+		TRY_AGAIN: // check if the value of the number generated with the user input
 			cp guess, number
-			brlt KURANG
-			brge LEBIH_SAMA
+			brlt KURANG // if its less than, goes to KURANG
+			brge LEBIH_SAMA // if its more, goes to LEBIH SAMA
 
-		KURANG:
+		KURANG: // Indicates that the users input number value is too low
 			rcall CLEAR_SECOND_ROW
 			rcall LOWER_WRITE
 			rcall LOADBYTE
 			ldi r27, 0b11000000
 			out PORTA, r27
-			rcall DELAY_01
+			rcall DELAY_01 
 			rjmp CONTINUE
 
-		LEBIH_SAMA:
-			cp guess, number
-			breq TEST
+		LEBIH_SAMA: // checks whether the number is more or equal
+			cp guess, number // checks
+			breq TEST// if its equal go to TEST
 			; masih kelebihan
-			rcall CLEAR_SECOND_ROW
+			rcall CLEAR_SECOND_ROW// else prints that the number is still to large
 			rcall HIGHER_WRITE
 			rcall LOADBYTE
 			ldi r27, 0b00001100
@@ -391,59 +413,59 @@ GAME_START:
 			rjmp CONTINUE
 
 		CONTINUE:
+			rcall DELAY_01 // multiple delay functions to indicate the users input the higher lower message so it doesnt be deleted directly
 			rcall DELAY_01
 			rcall DELAY_01
 			rcall DELAY_01
 			rcall DELAY_01
-			rcall DELAY_01
-			ldi guess, 0
+			ldi guess, 0 // resets guess
 			rcall CLEAR_SECOND_ROW
 			rcall LOADBYTE
-			rjmp PRINT_GUESS
+			rjmp PRINT_GUESS // re prints guess
 			ret
 
 		TEST:
 			; guess correct led
 			ldi r27, 0b00110000
 			out PORTA, r27
-			cpi levelIndicator, 0x39
-			breq forever
-			dec flag_game_start
-			ldi timerIndicator, 0x00
-			mov handler2, timerIndicator
-			ldi guess, 0
-			rcall CLEAR_SECOND_ROW
+			cpi levelIndicator, 0x39 // check if its already on the last level
+			breq forever // if so jumps to forever
+			dec flag_game_start// if not  flag indicates to 0x00
+			ldi timerIndicator, 0x00 // loads the timer Indicator as a resetter for the time
+			mov handler2, timerIndicator // move to handler 2 to activate next button
+			ldi guess, 0 // reset guess
+			rcall CLEAR_SECOND_ROW // clears the second row
 			rcall LOADBYTE
-			rcall GO_DOWN
-			rcall DECIDER
+			rcall GO_DOWN//go down
+			rcall DECIDER// check decider
 			rcall LOADBYTE
 			rjmp GENERATE_NUMBER
 		
-		DECIDER:
-			cpi timerLost, 0x01
-			breq LOSE_LEVEL
-			inc score
-			rcall SCORE_WRITE
-			cpi levelIndicator, 0x38
-			breq PRINT_FINAL
-			rcall READY_WRITE
-			rcall LOADBYTE
+		DECIDER:// decider to check if the user has lost the level or not
+			cpi timerLost, 0x01  // timer is over the time limit
+			breq LOSE_LEVEL// jumps to the lose_level branch
+			inc score// if user does not lose increments score
+			rcall SCORE_WRITE// writes score
+			cpi levelIndicator, 0x38// check if its on 1 level before the final
+			breq PRINT_FINAL// if so prints oh noes message
+			rcall READY_WRITE // if its not on the last level means the user is correct , prints noce ready message into the LCD
+			rcall LOADBYTE 
 			ret
 			
-		PRINT_FINAL:
-			rcall CLEAR_SECOND_ROW
+		PRINT_FINAL: // Indicate and writes the final level message
+			rcall CLEAR_SECOND_ROW 
 			rcall GO_DOWN
 			rcall FINAL_WRITE
 			rcall LOADBYTE
 			ret		
 
-		LOSE_LEVEL:
+		LOSE_LEVEL: // writes if the user lost the current level
 			cpi levelIndicator,0x38
 			breq PRINT_FINAL
 			rcall NOOB_WRITE
 			ret
 
-		forever:
+		forever: // forever function is a function before the game finishes where it shows the users final score and the thank you message
 			rcall CLEAR_LCD
 			rcall END_SCORE_WRITE
 			mov A,score
@@ -453,30 +475,30 @@ GAME_START:
 			rcall WRITE_TEXT
 			rcall GO_DOWN
 			rcall THANK_YOU_WRITE
-			ldi timerIndicator,0x00	
+			ldi timerIndicator,0x00	//disable timer
 			rjmp eternal
 
-		eternal:
+		eternal: // eternal loop
 			rjmp eternal
 
 NEXT_GAME:
-		ldi r27, 0b00000000
+		ldi r27, 0b00000000 // suppose that the user has won/lost reprepare for the next level
 		out PORTA, r27
-		cp handler2,r1
-		brne DO_NOTHING
-		inc handler2
-		rcall CHANGE_LEVEL
+		cp handler2,r1 // handler2 a flag register to make deactivate/activate the next button
+		brne DO_NOTHING // if its equal to 0, do nothing (unpressable)
+		inc handler2 // else increments
+		rcall CHANGE_LEVEL // change level into the lcd
 		rcall CLEAR_SECOND_ROW
 		rcall LOADBYTE
 		rcall GO_DOWN
 		ldi r26,0x01
-		ldi timerIndicator,0x01
-		ldi timerLost,0x00
-		mov flag_game_start,r26
+		ldi timerIndicator,0x01 // indicate timer 
+		ldi timerLost,0x00		// reset timer lost
+		mov flag_game_start,r26 //inidcate flag game
 		reti
 
 DO_NOTHING:
-	reti
+	reti // do nothing
 	
 
 CLEAR_LCD:
@@ -563,7 +585,7 @@ WRITE_TEXT:
 	cbi PORTA, 0 ; CLR EN
 	ret
 
-GO_DOWN:
+GO_DOWN: // Function to go to bit address 64 (staring point of bottom)
 	cbi PORTA, 1
 	ldi PB, 0xC0
 	out PORTB, PB
@@ -571,7 +593,7 @@ GO_DOWN:
 	cbi PORTA, 0
 	ret
 
-LEVEL_WRITE:
+LEVEL_WRITE: // Function to word level on to the LCD
 	ldi ZH, high(level * 2)
 	ldi ZL, low(level * 2)
 	rcall LOADBYTE
@@ -584,7 +606,7 @@ LEVEL_WRITE:
 
 	ret
 
-SCORE_WRITE:
+SCORE_WRITE: // Function to show the current score of the user
 	cbi PORTA, 1
 	ldi PB, 0x90
 	out PORTB, PB
@@ -595,7 +617,7 @@ SCORE_WRITE:
 	rcall WRITE_TEXT
 	ret
 
-POINT_WRITE:
+POINT_WRITE: // Function to write the point word into the LCD
 	ldi ZH, high(point * 2)
 	ldi ZL, low(point * 2)
 	rcall LOADBYTE
@@ -608,13 +630,13 @@ POINT_WRITE:
 	rcall SEPARATOR_WRITE
 	ret
 
-TIME_WRITE:
+TIME_WRITE: // Function to write the time word into the LCD
 	ldi ZH, high(time * 2)
 	ldi ZL, low(time * 2)
 	rcall LOADBYTE
 	ret
 
-CHANGE_LEVEL_LCD:
+CHANGE_LEVEL_LCD: // A function to increment the level and writes it to the LCD
 	subi levelIndicator, -1
 	mov A, levelIndicator
 	cbi PORTA, 1
@@ -625,52 +647,52 @@ CHANGE_LEVEL_LCD:
 	rcall WRITE_TEXT
 	ret
 
-SEPARATOR_WRITE:
+SEPARATOR_WRITE: //writes separator
 	ldi ZH, high(pipe * 2)
 	ldi ZL, low(pipe * 2)
 	rcall LOADBYTE
 	ret	
 
-FINAL_WRITE:
+FINAL_WRITE: // writes the oh noes final level word into the LCD
 	ldi ZH, high(final * 2)
 	ldi ZL, low(final * 2)
 	rcall LOADBYTE
 	ret	
 
-END_SCORE_WRITE:
+END_SCORE_WRITE: // writes the you got: word into the LCD
 	ldi ZH, high(endScore * 2)
 	ldi ZL, low(endScore * 2)
 	rcall LOADBYTE
 	ret
 
-THANK_YOU_WRITE:
+THANK_YOU_WRITE: // writes thank you message into LCD
 	ldi ZH, high(thankyou*2)
 	ldi ZL,low(thankyou*2)
 	rcall LOADBYTE
 	ret
 
-READY_WRITE:
+READY_WRITE: //writes if the user is ready for the next level or not onto the LCD
 	rcall GO_DOWN
 	ldi ZH, high(ready * 2)
 	ldi ZL, low(ready * 2)
 	rcall LOADBYTE
 	ret
 
-HIGHER_WRITE:
+HIGHER_WRITE: // writes  if the user inputs a number higher than the number generated
 	rcall GO_DOWN
 	ldi ZH, high(higher * 2)
 	ldi ZL, low(higher * 2)
 	rcall LOADBYTE
 	ret
 
-LOWER_WRITE:
+LOWER_WRITE: // writes  if the user inputs a number lower than the number generated
 	rcall GO_DOWN
 	ldi ZH, high(lower * 2)
 	ldi ZL, low(lower * 2)
 	rcall LOADBYTE
 	ret
 	
-NOOB_WRITE:
+NOOB_WRITE:// writes  if the user has lost the level
 	ldi ZH, high(noob * 2)
 	ldi ZL, low(noob * 2)
 	rcall LOADBYTE
@@ -742,7 +764,7 @@ ISR_TOV0:	; One second of timer is approximately 24 times overflow on clock/64
 		rcall WRITE_TEXT
 		rjmp RETURN_TIME_INTERRUPT
 
-	TIMER_RUN_OUT:				; If the timer run out, well then the level is lost
+	TIMER_RUN_OUT:				; If the timer run out, well then the level is lost,here all time is resetted
 		ldi temp, 0
 		mov counter, temp
 		ldi temp, 5
